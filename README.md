@@ -1,4 +1,4 @@
-# VueModals
+# Vue Modals
 
 ## Project setup
 ```
