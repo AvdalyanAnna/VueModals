@@ -1,23 +1,25 @@
 <template>
   <modal
       title="Modal with form"
-      @close="$emit('close')"
+      @close="closeModal"
   >
     <!-- body -->
     <div slot="body">
       <form @submit.prevent="onSubmit">
+
         <!-- name -->
         <div class="form-item" :class="{ errorInput: $v.name.$error }">
           <label>Name: </label>
           <p class="errorText" v-if="!$v.name.required">Filed is required!</p>
-          <p class="errorText" v-if="!$v.name.minLength">Name must have at least
-            {{ $v.name.$params.minLength.min }}!
+          <p class="errorText" v-if="!$v.name.minLength">
+            Name must have at least {{ $v.name.$params.minLength.min }}!
           </p>
           <input
               v-model="name"
               :class="{ error: $v.name.$error }"
               @blur="$v.name.$touch()">
         </div>
+
         <!-- email -->
         <div class="form-item" :class="{ errorInput: $v.email.$error }">
           <label>Email:</label>
@@ -28,8 +30,10 @@
               :class="{ error: $v.email.$error }"
               @blur="$v.email.$touch()">
         </div>
+
         <!-- button -->
         <button type="submit" class="btn btnPrimary">Submit!</button>
+
       </form>
     </div>
   </modal>
@@ -63,7 +67,7 @@ export default {
   methods: {
     onSubmit() {
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      if (!this.$v.$invalid) {
         const user = {
           name: this.name,
           email: this.email
@@ -75,6 +79,12 @@ export default {
         this.$v.$reset();
         this.$emit('close');
       }
+    },
+    closeModal(){
+      this.name= '';
+      this.email= '';
+      this.$v.$reset();
+      this.$emit('close');
     }
   }
 }
